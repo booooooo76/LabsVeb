@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Облік продуктів в магазині</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+input {
+    padding: 5px;
+    margin: 10px;
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 5px;
+}
+
+  </style>
+</head>
+<body>
+    <h1>Інтернет-магазин</h1>
+
+    <h2>Додавання нового продукту</h2>
+    <input type="text" id="productName" placeholder="Назва продукту">
+    <input type="number" id="productPrice" placeholder="Ціна">
+    <input type="number" id="productQuantity" placeholder="Кількість">
+    <button onclick="addProduct()">Додати продукт</button>
+
+    <h2>Оновлення інформації про продукт</h2>
+    <input type="text" id="updateProductName" placeholder="Назва продукту для оновлення">
+    <input type="number" id="updateProductPrice" placeholder="Нова ціна">
+    <input type="number" id="updateProductQuantity" placeholder="Нова кількість">
+    <button onclick="updateProduct()">Оновити продукт</button>
+
+    <h2>Пошук продукту за назвою</h2>
+    <input type="text" id="searchProductName" placeholder="Назва продукту для пошуку">
+    <button onclick="searchProduct()">Пошук продукту</button>
+
+    <h2>Видалення продукту</h2>
+    <input type="text" id="deleteProductName" placeholder="Назва продукту для видалення">
+    <button onclick="deleteProduct()">Видалити продукт</button>
+
+    <h2>Облік замовлень</h2>
+    <input type="text" id="orderProductName" placeholder="Продукт для замовлення">
+    <input type="number" id="orderQuantity" placeholder="Кількість для замовлення">
+    <button onclick="placeOrder()">Оформити замовлення</button>
+
+    <h2>Список продуктів</h2>
+    <ul id="productList"></ul>
+
+    <h2>Історія змін продуктів (WeakMap)</h2>
+    <ul id="historyList"></ul>
+
+    <script src="js4.js"></script>
+</body>
+</html>
