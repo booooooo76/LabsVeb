@@ -3,29 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лампочка</title>
+    <title>Управління лампочкою</title>
     <style>
-        #lamp {
-            width: 100px;
-            height: auto;
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .lamp-container {
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .lamp {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px auto;
+            background-color: #f5f5f5;
+            border: 2px solid #ddd;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .lamp.on {
+            background-color: #FFEB3B;
+            box-shadow: 0 0 30px 10px rgba(255, 235, 59, 0.7);
+        }
+        
+        .lamp.energy-saving.on {
+            background-color: #E0F7FA;
+            box-shadow: 0 0 30px 10px rgba(224, 247, 250, 0.7);
+        }
+        
+        .lamp.led.on {
+            background-color: #FFFFFF;
+            box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.9);
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .lamp-type {
+            margin: 20px 0;
+        }
+        
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .brightness-control {
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .brightness-control.visible {
+            display: block;
+        }
+        
+        .timer {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <h1>Керування лампочкою</h1>
-    <img id="lamp" src="lampOff.png" alt="Лампочка">
-    <br>
-    <button id="toggleButton">Включити/Виключити</button>
-    <br>
-    <label for="lampType">Тип лампочки:</label>
-    <select id="lampType">
-        <option value="звичайна">Звичайна</option>
-        <option value="енергозберігаюча">Енергозберігаюча</option>
-        <option value="світлодіодна">Світлодіодна</option>
-    </select>
-    <br>
-    <button id="brightnessButton">Змінити яскравість</button>
-
-    <script src="js1.js"></script>
+    <h1>Управління лампочкою</h1>
+    
+    <div class="lamp-type">
+        <label for="lamp-select">Оберіть тип лампочки:</label>
+        <select id="lamp-select">
+            <option value="regular">Звичайна лампочка</option>
+            <option value="energy-saving">Енергозберігаюча лампочка</option>
+            <option value="led">Світлодіодна лампочка</option>
+        </select>
+    </div>
+    
+    <div class="lamp-container">
+        <div id="lamp" class="lamp"></div>
+    </div>
+    
+    <div class="controls">
+        <button id="toggle-btn">Включити</button>
+        <button id="brightness-btn">Змінити яскравість</button>
+    </div>
+    
+    <div id="brightness-control" class="brightness-control">
+        <p>Поточна яскравість: <span id="brightness-value">100</span>%</p>
+    </div>
+    
+    <div class="timer" id="timer"></div>
+    
+    <script>
+        // Отримання елементів
+        const lamp = document.getElementById('lamp');
+        const toggleBtn = document.getElementById('toggle-btn');
+        const brightnessBtn = document.getElementById('brightness-btn');
+        const lampSelect = document.getElementById('lamp-select');
+        const brightnessControl = document.getElementById('brightness-control');
+        const brightnessValue = document.getElementById('brightness-value');
+        const timerElement = document.getElementById('timer');
+        
+        // Змінні для стану лампочки
+        let isOn = false;
+        let lampType = 'regular';
+        let brightness = 100;
+        let inactivityTimer;
+        let inactivityTimeout = 5 * 60 * 1000; // 5 хвилин
+        let timeoutStartTime;
+        let timeRemainingInterval;
+        
+        // Функції
+        function updateLampAppearance() {
+            // Очистити всі класи типів лампочок
+            lamp.classList.remove('regular', 'energy-saving', 'led');
+            
+            // Додати поточний тип
+            lamp.classList.add(lampType);
+            
+            // Оновити стан (увімкнено/вимкнено)
+            if (isOn) {
+                lamp.classList.add('on');
+                // Оновити яскравість, якщо лампочка LED або енергозберігаюча
+                if (lampType === 'led' || lampType === 'energy-saving') {
+                    const opacity = brightness / 100;
+                    lamp.style.opacity = opacity;
+                } else {
+                    lamp.style.opacity = 1; // Звичайна лампочка не регулюється
+                }
+                // Запустити таймер бездіяльності
+                startInactivityTimer();
+                // Оновити текст кнопки
+                toggleBtn.textContent = 'Виключити';
+            } else {
+                lamp.classList.remove('on');
+                lamp.style.opacity = 1;
+                clearInactivityTimer();
+                toggleBtn.textContent = 'Включити';
+                clearInterval(timeRemainingInterval);
+                timerElement.textContent = '';
+            }
+            
+            // Показати/приховати елемент зміни яскравості
+            if ((lampType === 'led' || lampType === 'energy-saving') && isOn) {
+                brightnessControl.classList.add('visible');
+                brightnessBtn.disabled = false;
+            } else {
+                brightnessControl.classList.remove('visible');
+                brightnessBtn.disabled = true;
+            }
+        }
+        
+        function toggleLamp() {
+            isOn = !isOn;
+            updateLampAppearance();
+        }
+        
+        function changeBrightness() {
+            if (isOn && (lampType === 'led' || lampType === 'energy-saving')) {
+                const newBrightness = prompt('Введіть бажану яскравість (від 10 до 100%):', brightness);
+                if (newBrightness !== null) {
+                    const value = parseInt(newBrightness);
+                    if (!isNaN(value) && value >= 10 && value <= 100) {
+                        brightness = value;
+                        brightnessValue.textContent = brightness;
+                        updateLampAppearance();
+                        // Скинути таймер бездіяльності при зміні яскравості
+                        resetInactivityTimer();
+                    } else {
+                        alert('Будь ласка, введіть число від 10 до 100');
+                    }
+                }
+            }
+        }
+        
+        function changeLampType() {
+            lampType = lampSelect.value;
+            updateLampAppearance();
+            // Скинути таймер бездіяльності при зміні типу лампочки
+            resetInactivityTimer();
+        }
+        
+        function startInactivityTimer() {
+            // Очищаємо попередній таймер
+            clearInactivityTimer();
+            
+            // Запам'ятовуємо час початку
+            timeoutStartTime = Date.now();
+            
+            // Встановлюємо новий таймер
+            inactivityTimer = setTimeout(() => {
+                if (isOn) {
+                    isOn = false;
+                    updateLampAppearance();
+                    alert('Лампочка автоматично вимкнулась через бездіяльність.');
+                }
+            }, inactivityTimeout);
+            
+            // Оновлюємо відображення часу, що залишився
+            updateTimeRemaining();
+            timeRemainingInterval = setInterval(updateTimeRemaining, 1000);
+        }
+        
+        function updateTimeRemaining() {
+            if (!isOn) return;
+            
+            const elapsed = Date.now() - timeoutStartTime;
+            const remaining = Math.max(0, inactivityTimeout - elapsed);
+            
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            
+            timerElement.textContent = `Автоматичне вимкнення через: ${minutes} хв ${seconds} сек`;
+        }
+        
+        function clearInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            clearInterval(timeRemainingInterval);
+        }
+        
+        function resetInactivityTimer() {
+            if (isOn) {
+                clearInactivityTimer();
+                startInactivityTimer();
+            }
+        }
+        
+        // Обробники подій
+        toggleBtn.addEventListener('click', toggleLamp);
+        brightnessBtn.addEventListener('click', changeBrightness);
+        lampSelect.addEventListener('change', changeLampType);
+        
+        // Додаємо обробники для скидання таймера при взаємодії з сторінкою
+        document.addEventListener('click', resetInactivityTimer);
+        document.addEventListener('keydown', resetInactivityTimer);
+        
+        // Початкова ініціалізація
+        updateLampAppearance();
+    </script>
 </body>
 </html>
