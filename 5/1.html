@@ -6,66 +6,189 @@
     <title>Управління лампочкою</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             text-align: center;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
         }
         
         .lamp-container {
-            margin: 20px 0;
+            margin: 40px 0;
             position: relative;
+            height: 300px;
         }
         
+        /* Дріт лампочки */
+        .lamp-wire {
+            width: 2px;
+            height: 60px;
+            background-color: #333;
+            margin: 0 auto;
+        }
+        
+        /* Патрон лампочки */
+        .lamp-socket {
+            width: 50px;
+            height: 20px;
+            background-color: #777;
+            border-radius: 5px 5px 0 0;
+            margin: 0 auto;
+            border: 1px solid #555;
+        }
+        
+        .lamp-base {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(to right, #999, #ddd, #999);
+            margin: 0 auto;
+            border-radius: 5px;
+            border: 1px solid #888;
+        }
+        
+        /* Лампочка */
         .lamp {
-            width: 150px;
+            width: 100px;
             height: 150px;
-            border-radius: 50%;
-            margin: 20px auto;
-            background-color: #f5f5f5;
-            border: 2px solid #ddd;
+            margin: 0 auto;
             position: relative;
             transition: all 0.3s ease;
         }
         
-        .lamp.on {
+        /* Верхня частина лампочки (скло) */
+        .lamp-bulb {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            border: 2px solid #ddd;
+            position: relative;
+            transition: all 0.3s ease;
+            margin: 0 auto;
+        }
+        
+        /* Візуальні ефекти різних типів лампочок */
+        
+        /* Звичайна лампочка */
+        .lamp.regular .lamp-bulb.on {
             background-color: #FFEB3B;
-            box-shadow: 0 0 30px 10px rgba(255, 235, 59, 0.7);
+            box-shadow: 
+                0 0 30px 10px rgba(255, 235, 59, 0.7),
+                0 0 10px 2px rgba(255, 235, 59, 0.9) inset;
         }
         
-        .lamp.energy-saving.on {
+        /* Енергозберігаюча лампочка - спіральна форма */
+        .lamp.energy-saving .lamp-bulb {
+            position: relative;
+        }
+        
+        .lamp.energy-saving .lamp-bulb:before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            width: 50px;
+            height: 70px;
+            border: 3px solid #ddd;
+            border-radius: 40%;
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 0 80%);
+            opacity: 0.6;
+        }
+        
+        .lamp.energy-saving .lamp-bulb.on {
             background-color: #E0F7FA;
-            box-shadow: 0 0 30px 10px rgba(224, 247, 250, 0.7);
+            box-shadow: 
+                0 0 30px 10px rgba(224, 247, 250, 0.7),
+                0 0 10px 2px rgba(224, 247, 250, 0.9) inset;
         }
         
-        .lamp.led.on {
+        .lamp.energy-saving .lamp-bulb.on:before {
+            border-color: #B2EBF2;
+            box-shadow: 0 0 15px 5px rgba(178, 235, 242, 0.5);
+        }
+        
+        /* Світлодіодна лампочка */
+        .lamp.led .lamp-bulb {
+            background-color: #f5f5f5;
+            position: relative;
+        }
+        
+        .lamp.led .lamp-bulb:before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: repeating-linear-gradient(
+                45deg,
+                #eee,
+                #eee 5px,
+                #f8f8f8 5px,
+                #f8f8f8 10px
+            );
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        
+        .lamp.led .lamp-bulb.on {
             background-color: #FFFFFF;
-            box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 0 30px 10px rgba(255, 255, 255, 0.9),
+                0 0 10px 2px rgba(255, 255, 255, 1) inset;
+        }
+        
+        .lamp.led .lamp-bulb.on:before {
+            background: repeating-linear-gradient(
+                45deg,
+                #fff,
+                #fff 5px,
+                #f0f0f0 5px,
+                #f0f0f0 10px
+            );
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
         }
         
         .controls {
-            margin: 20px 0;
+            margin: 30px 0;
         }
         
         button {
-            padding: 10px 15px;
-            margin: 5px;
+            padding: 12px 20px;
+            margin: 10px;
             border: none;
-            border-radius: 4px;
-            background-color: #4CAF50;
+            border-radius: 50px;
+            background-color: #3498db;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.1);
         }
         
         button:hover {
-            background-color: #45a049;
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 8px rgba(0,0,0,0.15);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
         }
         
         button:disabled {
-            background-color: #cccccc;
+            background-color: #bdc3c7;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .lamp-type {
@@ -73,14 +196,22 @@
         }
         
         select {
-            padding: 8px;
-            border-radius: 4px;
+            padding: 10px 15px;
+            border-radius: 50px;
             border: 1px solid #ddd;
+            width: 250px;
+            font-size: 16px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
         .brightness-control {
             margin: 20px 0;
             display: none;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
         .brightness-control.visible {
@@ -88,9 +219,17 @@
         }
         
         .timer {
-            margin-top: 10px;
+            margin-top: 20px;
             font-style: italic;
-            color: #666;
+            color: #7f8c8d;
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 14px;
+        }
+        
+       
         }
     </style>
 </head>
@@ -107,7 +246,13 @@
     </div>
     
     <div class="lamp-container">
-        <div id="lamp" class="lamp"></div>
+        <div class="lamp-wire"></div>
+        <div class="lamp-socket"></div>
+        <div class="lamp" id="lamp">
+            <div class="lamp-base"></div>
+            <div id="lamp-bulb" class="lamp-bulb"></div>
+        </div>
+        <div id="light-effect" class="light-effect"></div>
     </div>
     
     <div class="controls">
@@ -124,6 +269,8 @@
     <script>
         // Отримання елементів
         const lamp = document.getElementById('lamp');
+        const lampBulb = document.getElementById('lamp-bulb');
+        const lightEffect = document.getElementById('light-effect');
         const toggleBtn = document.getElementById('toggle-btn');
         const brightnessBtn = document.getElementById('brightness-btn');
         const lampSelect = document.getElementById('lamp-select');
@@ -144,27 +291,33 @@
         function updateLampAppearance() {
             // Очистити всі класи типів лампочок
             lamp.classList.remove('regular', 'energy-saving', 'led');
+            lightEffect.classList.remove('regular', 'energy-saving', 'led');
             
             // Додати поточний тип
             lamp.classList.add(lampType);
+            lightEffect.classList.add(lampType);
             
             // Оновити стан (увімкнено/вимкнено)
             if (isOn) {
-                lamp.classList.add('on');
+                lampBulb.classList.add('on');
+                lightEffect.classList.add('on');
                 // Оновити яскравість, якщо лампочка LED або енергозберігаюча
                 if (lampType === 'led' || lampType === 'energy-saving') {
                     const opacity = brightness / 100;
-                    lamp.style.opacity = opacity;
+                    lampBulb.style.opacity = opacity;
+                    lightEffect.style.opacity = opacity * 0.7; // Трохи менш яскравий ефект на підлозі
                 } else {
-                    lamp.style.opacity = 1; // Звичайна лампочка не регулюється
+                    lampBulb.style.opacity = 1; // Звичайна лампочка не регулюється
+                    lightEffect.style.opacity = 0.7;
                 }
                 // Запустити таймер бездіяльності
                 startInactivityTimer();
                 // Оновити текст кнопки
                 toggleBtn.textContent = 'Виключити';
             } else {
-                lamp.classList.remove('on');
-                lamp.style.opacity = 1;
+                lampBulb.classList.remove('on');
+                lightEffect.classList.remove('on');
+                lampBulb.style.opacity = 1;
                 clearInactivityTimer();
                 toggleBtn.textContent = 'Включити';
                 clearInterval(timeRemainingInterval);
