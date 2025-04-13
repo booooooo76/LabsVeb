@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Магазин чаю</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header, footer {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 1em;
+    }
+    main {
+      flex: 1;
+      padding: 20px;
+    }
+    .products-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .product-card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      width: 250px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .product-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .product-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .product-actions button {
+      flex: 1;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      margin-left: -125px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1001;
+      right: 30px;
+      bottom: 30px;
+      font-size: 17px;
+      opacity: 0;
+      transition: opacity 0.5s, bottom 0.5s;
+    }
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+      bottom: 50px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Магазин чаю</h1>
+  </header>
+  <main>
+    <button onclick="openAddModal()">Додати новий чай</button>
+    <p id="empty-message">Наразі список товарів пустий. Додайте новий товар.</p>
+    <div class="products-container" id="products"></div>
+
+    <div id="addModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeAddModal()">&times;</span>
+        <h3>Додати новий товар</h3>
+        <form id="addForm">
+          <input type="text" name="name" placeholder="Назва чаю" required><br>
+          <input type="number" name="price" placeholder="Ціна" required><br>
+          <input type="text" name="category" placeholder="Категорія" required><br>
+          <input type="url" name="image" placeholder="URL зображення" required><br>
+          <button type="submit">Додати</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeEditModal()">&times;</span>
+        <h3>Редагувати товар</h3>
+        <form id="editForm">
+          <input type="hidden" name="id">
+          <input type="text" name="name" placeholder="Назва чаю" required><br>
+          <input type="number" name="price" placeholder="Ціна" required><br>
+          <input type="text" name="category" placeholder="Категорія" required><br>
+          <input type="url" name="image" placeholder="URL зображення" required><br>
+          <button type="submit">Зберегти</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2025 Магазин чаю</p>
+  </footer>
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let products = [];
+
+    const productsContainer = document.getElementById('products');
+    const emptyMessage = document.getElementById('empty-message');
+    const toast = document.getElementById('toast');
+
+    const addModal = document.getElementById('addModal');
+    const editModal = document.getElementById('editModal');
+
+    const addForm = document.getElementById('addForm');
+    const editForm = document.getElementById('editForm');
+
+    const openAddModal = () => addModal.style.display = 'flex';
+    const closeAddModal = () => addModal.style.display = 'none';
+    const openEditModal = () => editModal.style.display = 'flex';
+    const closeEditModal = () => editModal.style.display = 'none';
+
+    window.onclick = e => {
+      if (e.target === addModal) closeAddModal();
+      if (e.target === editModal) closeEditModal();
+    };
+
+    const showToast = (message) => {
+      toast.textContent = message;
+      toast.className = 'toast show';
+      setTimeout(() => toast.className = 'toast', 3000);
+    };
+
+    const renderProducts = () => {
+      productsContainer.innerHTML = '';
+      if (products.length === 0) {
+        emptyMessage.style.display = 'block';
+        return;
+      }
+      emptyMessage.style.display = 'none';
+
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        card.innerHTML = `
+          <p><strong>ID:</strong> ${product.id}</p>
+          <img src="${product.image}" alt="${product.name}">
+          <p><strong>Назва:</strong> ${product.name}</p>
+          <p><strong>Ціна:</strong> ${product.price} грн</p>
+          <p><strong>Категорія:</strong> ${product.category}</p>
+          <div class="product-actions">
+            <button onclick="editProduct(${product.id})">Редагувати</button>
+            <button onclick="deleteProduct(${product.id})">Видалити</button>
+          </div>
+        `;
+
+        productsContainer.appendChild(card);
+      });
+    };
+
+    const deleteProduct = id => {
+      products = products.filter(p => p.id !== id);
+      renderProducts();
+      showToast(`Товар з ID ${id} видалено.`);
+    };
+
+    const editProduct = id => {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+      editForm.id.value = product.id;
+      editForm.name.value = product.name;
+      editForm.price.value = product.price;
+      editForm.category.value = product.category;
+      editForm.image.value = product.image;
+      openEditModal();
+    };
+
+    addForm.onsubmit = e => {
+      e.preventDefault();
+      const newProduct = {
+        id: Date.now(),
+        name: addForm.name.value,
+        price: +addForm.price.value,
+        category: addForm.category.value,
+        image: addForm.image.value
+      };
+      products.push(newProduct);
+      renderProducts();
+      closeAddModal();
+      showToast('Новий товар додано!');
+      addForm.reset();
+    };
+
+    editForm.onsubmit = e => {
+      e.preventDefault();
+      const id = +editForm.id.value;
+      const index = products.findIndex(p => p.id === id);
+      if (index === -1) return;
+      products[index] = {
+        ...products[index],
+        name: editForm.name.value,
+        price: +editForm.price.value,
+        category: editForm.category.value,
+        image: editForm.image.value
+      };
+      renderProducts();
+      closeEditModal();
+      showToast(`Товар з ID ${id} оновлено!`);
+    };
+
+    renderProducts();
+  </script>
+</body>
+</html>
