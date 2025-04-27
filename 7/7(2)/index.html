@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wild West Duel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animate_modified.css">
+</head>
+<body>
+
+  <!-- Main Menu -->
+  <section class="game-menu">
+    <h1 class="game-menu__title">Wild West Duel</h1>
+    <button class="button button-start-game">Play Now</button>
+  </section>
+
+  <div class="wrapper">
+
+    <!-- Game Messages -->
+    <div class="message"></div>
+
+    <!-- Game Panels -->
+    <section class="game-panels">
+      <div class="players-panel">
+        <div class="players-panel__you">Your Time</div>
+        <div class="players-panel__gunman">Opponent</div>
+      </div>
+      <div class="white-line"></div>
+      <div class="time-panel">
+        <div class="time-panel__gunman">0.00</div>
+        <div class="time-panel__you">0.00</div>
+      </div>
+      <div class="score-panel">
+        <div class="score-panel__score">Points: <span class="score-panel__score_num">0</span></div>
+        <div class="score-panel__level">Stage 1</div>
+      </div>
+    </section>
+
+    <!-- Main Game Area -->
+    <section class="game-screen">
+      <div class="gunman"></div>
+      <button class="button button-restart">Try Again</button>
+      <button class="button button-next-level">Next Stage</button>
+    </section>
+
+  </div>
+
+  <!-- Victory Screen -->
+  <section class="win-screen">
+    <h2 class="win-screen__title">Victory Achieved!</h2>
+  </section>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
