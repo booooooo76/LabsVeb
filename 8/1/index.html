@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Pair Game</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Memory Pair Game</h1>
+        
+        <!-- Settings Panel -->
+        <div class="settings-panel" id="settingsPanel">
+            <h2>Game Settings</h2>
+            
+            <div class="setting-group">
+                <label for="playerMode">Player Mode:</label>
+                <select id="playerMode">
+                    <option value="1">1 Player</option>
+                    <option value="2">2 Players</option>
+                </select>
+            </div>
+            
+            <div class="setting-group player-names">
+                <div class="player-name">
+                    <label for="player1Name">Player 1 Name:</label>
+                    <input type="text" id="player1Name" value="Player 1">
+                </div>
+                <div class="player-name hidden" id="player2NameContainer">
+                    <label for="player2Name">Player 2 Name:</label>
+                    <input type="text" id="player2Name" value="Player 2">
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <label for="gridSize">Grid Size:</label>
+                <select id="gridSize">
+                    <option value="4x4">4 x 4 (8 pairs)</option>
+                    <option value="6x4">6 x 4 (12 pairs)</option>
+                    <option value="6x6">6 x 6 (18 pairs)</option>
+                </select>
+            </div>
+            
+            <div class="setting-group">
+                <label for="difficulty">Difficulty:</label>
+                <select id="difficulty">
+                    <option value="easy">Easy (3 minutes)</option>
+                    <option value="normal">Normal (2 minutes)</option>
+                    <option value="hard">Hard (1 minute)</option>
+                </select>
+            </div>
+            
+            <div class="setting-group">
+                <label for="rounds">Number of Rounds:</label>
+                <input type="number" id="rounds" min="1" max="5" value="1">
+            </div>
+            
+            <div class="buttons">
+                <button id="resetSettings">Reset Settings</button>
+                <button id="startGame">Start Game</button>
+            </div>
+        </div>
+        
+        <!-- Game Info -->
+        <div class="game-info hidden" id="gameInfo">
+            <div class="info-group">
+                <div class="current-player" id="currentPlayer">Current Player: Player 1</div>
+                <div class="timer" id="timer">Time: 03:00</div>
+            </div>
+            <div class="info-group">
+                <div class="moves" id="moves">Moves: 0</div>
+                <div class="round" id="roundInfo">Round: 1</div>
+            </div>
+            <div class="buttons">
+                <button id="restartGame">Restart Game</button>
+                <button id="backToSettings">Back to Settings</button>
+            </div>
+        </div>
+        
+        <!-- Game Board -->
+        <div class="game-board" id="gameBoard"></div>
+        
+        <!-- Game Results -->
+        <div class="game-results hidden" id="gameResults">
+            <h2>Game Results</h2>
+            <div id="winnerDisplay"></div>
+            <div id="statsTable"></div>
+            <div class="buttons">
+                <button id="playAgain">Play Again</button>
+                <button id="newSettings">New Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js.js"></script>
+</body>
+</html>
