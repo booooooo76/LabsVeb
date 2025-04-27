@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+    <header>
+        <h1>Kanban Board</h1>
+    </header>
+    
+    <main class="kanban-container">
+        <div class="kanban-column" id="todo">
+            <div class="column-header">
+                <h2>To Do</h2>
+                <span class="task-count" id="todo-count">0</span>
+            </div>
+            <div class="tasks-container" id="todo-tasks" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="task" draggable="true" ondragstart="drag(event)" id="task1">
+                    <div class="task-header">
+                        <span class="task-id">#1</span>
+                        <span class="priority high">High</span>
+                    </div>
+                    <h3>Create project documentation</h3>
+                    <p>Write detailed documentation for the new project including user guides and API references.</p>
+                    <div class="task-footer">
+                        <span class="due-date">Due: 05/05/2025</span>
+                        <span class="assigned-to">John D.</span>
+                    </div>
+                </div>
+                
+                <div class="task" draggable="true" ondragstart="drag(event)" id="task2">
+                    <div class="task-header">
+                        <span class="task-id">#2</span>
+                        <span class="priority medium">Medium</span>
+                    </div>
+                    <h3>Design landing page</h3>
+                    <p>Create wireframes and mockups for the new landing page design.</p>
+                    <div class="task-footer">
+                        <span class="due-date">Due: 06/12/2025</span>
+                        <span class="assigned-to">Alex S.</span>
+                    </div>
+                </div>
+                
+                <div class="task" draggable="true" ondragstart="drag(event)" id="task3">
+                    <div class="task-header">
+                        <span class="task-id">#3</span>
+                        <span class="priority low">Low</span>
+                    </div>
+                    <h3>Review code changes</h3>
+                    <p>Review and approve pull requests for the latest feature implementation.</p>
+                    <div class="task-footer">
+                        <span class="due-date">Due: 05/15/2025</span>
+                        <span class="assigned-to">Maria C.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="kanban-column" id="in-progress">
+            <div class="column-header">
+                <h2>In Progress</h2>
+                <span class="task-count" id="in-progress-count">0</span>
+            </div>
+            <div class="tasks-container" id="in-progress-tasks" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="task" draggable="true" ondragstart="drag(event)" id="task4">
+                    <div class="task-header">
+                        <span class="task-id">#4</span>
+                        <span class="priority high">High</span>
+                    </div>
+                    <h3>Implement authentication</h3>
+                    <p>Build user authentication system with OAuth integration.</p>
+                    <div class="task-footer">
+                        <span class="due-date">Due: 05/02/2025</span>
+                        <span class="assigned-to">Kate B.</span>
+                    </div>
+                </div>
+                
+                <div class="task" draggable="true" ondragstart="drag(event)" id="task5">
+                    <div class="task-header">
+                        <span class="task-id">#5</span>
+                        <span class="priority medium">Medium</span>
+                    </div>
+                    <h3>Fix reported bugs</h3>
+                    <p>Address the bugs reported in the latest sprint review session.</p>
+                    <div class="task-footer">
+                        <span class="due-date">Due: 05/10/2025</span>
+                        <span class="assigned-to">Michael R.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="kanban-column" id="review">
+            <div class="column-header">
+                <h2>Review</h2>
+                <span class="task-count" id="review-count">0</span>
+            </div>
+            <div class="tasks-container" id="review-tasks" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="task" draggable="true" ondragstart="drag(event)" id="task6">
+                    <div class="task-header">
+                        <span class="task-id">#6</span>
+                        <span class="priority high">High</span>
+                    </div>
+                    <h3>Create API endpoints</h3>
+                    <p>Implement RESTful API endpoints for the user management module.</p>
+                    <div class="task-footer">
+                        <span class="due-date">Due: 05/01/2025</span>
+                        <span class="assigned-to">David L.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="kanban-column" id="done">
+            <div class="column-header">
+                <h2>Done</h2>
+                <span class="task-count" id="done-count">0</span>
+            </div>
+            <div class="tasks-container" id="done-tasks" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="task" draggable="true" ondragstart="drag(event)" id="task7">
+                    <div class="task-header">
+                        <span class="task-id">#7</span>
+                        <span class="priority medium">Medium</span>
+                    </div>
+                    <h3>Project setup</h3>
+                    <p>Set up the project structure, dependencies, and continuous integration pipeline.</p>
+                    <div class="task-footer">
+                        <span class="due-date">Completed: 04/25/2025</span>
+                        <span class="assigned-to">Sarah J.</span>
+                    </div>
+                </div>
+                
+                <div class="task" draggable="true" ondragstart="drag(event)" id="task8">
+                    <div class="task-header">
+                        <span class="task-id">#8</span>
+                        <span class="priority low">Low</span>
+                    </div>
+                    <h3>Update dependencies</h3>
+                    <p>Update all project dependencies to their latest compatible versions.</p>
+                    <div class="task-footer">
+                        <span class="due-date">Completed: 04/20/2025</span>
+                        <span class="assigned-to">Tom H.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>Kanban Board - Drag and Drop Task Management</p>
+    </footer>
+    
+    <script src="js.js"></script>
+</body>
+</html>
