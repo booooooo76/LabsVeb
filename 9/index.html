@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №9 - Форми</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="login">Авторизація</div>
+            <div class="tab" data-tab="register">Реєстрація</div>
+        </div>
+        <div class="form-container">
+            <!-- Форма авторизації -->
+            <form id="loginForm" class="form active">
+                <div class="form-group">
+                    <label for="username">Ім'я користувача</label>
+                    <input type="text" id="username" class="form-control" placeholder="Введіть ім'я користувача">
+                    <div class="error-message" id="username-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Пароль</label>
+                    <div class="password-container">
+                        <input type="password" id="login-password" class="form-control" placeholder="Введіть пароль">
+                        <span class="toggle-password" data-target="login-password">👁️</span>
+                    </div>
+                    <div class="error-message" id="login-password-error"></div>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" id="rememberMe" class="form-check-input">
+                    <label for="rememberMe">Запам'ятати мене</label>
+                </div>
+
+                <button type="submit" class="btn">Увійти</button>
+                <div class="form-message" id="login-message"></div>
+            </form>
+
+            <!-- Форма реєстрації -->
+            <form id="registerForm" class="form">
+                <div class="form-group">
+                    <label for="firstName">Ім'я</label>
+                    <input type="text" id="firstName" class="form-control" placeholder="Введіть ім'я">
+                    <div class="error-message" id="firstName-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Прізвище</label>
+                    <input type="text" id="lastName" class="form-control" placeholder="Введіть прізвище">
+                    <div class="error-message" id="lastName-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="example@domain.com">
+                    <div class="error-message" id="email-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <div class="password-container">
+                        <input type="password" id="password" class="form-control" placeholder="Введіть пароль">
+                        <span class="toggle-password" data-target="password">👁️</span>
+                    </div>
+                    <div class="error-message" id="password-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Підтвердження паролю</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Підтвердіть пароль">
+                        <span class="toggle-password" data-target="confirmPassword">👁️</span>
+                    </div>
+                    <div class="error-message" id="confirmPassword-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Телефон</label>
+                    <input type="tel" id="phone" class="form-control" placeholder="+380XXXXXXXXX">
+                    <div class="error-message" id="phone-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthDate">Дата народження</label>
+                    <input type="date" id="birthDate" class="form-control">
+                    <div class="error-message" id="birthDate-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Стать</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="sex" value="male"> Чоловіча
+                        </label>
+                        <label>
+                            <input type="radio" name="sex" value="female"> Жіноча
+                        </label>
+                    </div>
+                    <div class="error-message" id="sex-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Країна</label>
+                    <select id="country" class="form-control">
+                        <option value="">Виберіть країну</option>
+                        <option value="ukraine">Україна</option>
+                        <option value="poland">Польща</option>
+                        <option value="germany">Німеччина</option>
+                        <option value="usa">США</option>
+                    </select>
+                    <div class="error-message" id="country-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">Місто</label>
+                    <select id="city" class="form-control" disabled>
+                        <option value="">Спочатку виберіть країну</option>
+                    </select>
+                    <div class="error-message" id="city-error"></div>
+                </div>
+
+                <button type="submit" class="btn">Зареєструватися</button>
+                <div class="form-message" id="register-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="javacript.js"></script>
+</body>
+</html>
